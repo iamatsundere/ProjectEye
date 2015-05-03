@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primaryColor">#29B6F6</color>
+    <color name="primaryColorDark">#039BE5</color>
+    <color name="accentColor">#E91E63</color>
+
+	<!-- B4 cho opacticy 80-->
+    <color name="mnu_restaurant">#C41D63</color>
+    <color name="mnu_park">#40b654</color>
+    <color name="mnu_gasstation">#FAAA18</color>
+</resources>

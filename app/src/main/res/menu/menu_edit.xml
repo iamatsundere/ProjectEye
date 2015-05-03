@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.materialdesign_actionbar.EditActivity">
+    <item
+        android:id="@+id/mnu_add"
+        android:title="ADD"
+        android:icon="@drawable/ic_add"
+        android:orderInCategory="1"
+        app:showAsAction="always"/>
+</menu>

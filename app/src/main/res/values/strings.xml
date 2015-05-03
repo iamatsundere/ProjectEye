@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">MaterialDesign_ActionBar</string>
+    <string name="hello_world">Hello World !</string>
+    <string name="mnu_edit">mnu_edit</string>
+    <string name="title_activity_sub">SubActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_edit">YOUR ROUTE</string>
+
+</resources>
