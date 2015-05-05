@@ -4,6 +4,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.materialdesign_actionbar.R;
@@ -28,6 +29,6 @@ public class PlaceViewHolder extends RecyclerView.ViewHolder {
         placeDistance= (TextView) itemView.findViewById(R.id.place_distance);
         placeAddress= (TextView) itemView.findViewById(R.id.place_address);
         placeColor=(ImageView) itemView.findViewById(R.id.place_background);
-        placeCardView=(CardView)itemView.findViewById(R.id.place_cardview);
+        placeCardView= (CardView) itemView.findViewById(R.id.place_cardview);
     }
 }

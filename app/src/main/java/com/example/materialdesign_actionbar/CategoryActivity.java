@@ -1,18 +1,18 @@
 package com.example.materialdesign_actionbar;
 
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.example.materialdesign_actionbar.adapter.CategoryRecyclerAdapter;
 import com.example.materialdesign_actionbar.model.Category;
+import com.example.materialdesign_actionbar.model.Place;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +30,10 @@ import java.util.List;
 
 public class CategoryActivity extends ActionBarActivity {
 
-    private CardView cardView;
     public static int typeID;
+    private PlaceReceiver placeReceiver;
+    private LatLng latLng;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,37 +51,62 @@ public class CategoryActivity extends ActionBarActivity {
         imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
-
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
         rc.setLayoutManager(new LinearLayoutManager(this));
 
         CategoryRecyclerAdapter catgrAdapter = new CategoryRecyclerAdapter(getData(), this);
         rc.setAdapter(catgrAdapter);
+
+        // Get the sent latitude and longitude;
+        Intent intent = getIntent();
+        latLng = intent.getParcelableExtra("LatLng");
+
+        // Register get place intent service
+        IntentFilter addressFilter = new IntentFilter("Broadcast address");
+        placeReceiver = new PlaceReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(placeReceiver, addressFilter);
     }
 
 
     public void OnBack(View view) {
         if (view.getId() == R.id.mnu_back) {
-            startActivity(new Intent(this, EditActivity.class));
+            finish();
         }
     }
+
     public void onCategoryClick(View view) {
-        CardView cd=(CardView) view.getParent().getParent();
-        typeID=cd.getId();
-        startActivity(new Intent(this,PlaceActivity.class));
+        CardView cd = (CardView) view.getParent().getParent();
+        typeID = cd.getId();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading data...");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
+        String typeSearch;
+        if (typeID == 0) {
+            typeSearch = "restaurant";
+        } else if (typeID == 1) {
+            typeSearch = "park";
+        } else {
+            typeSearch = "gas";
+        }
+        Intent intent = new Intent(this, GetPlacesIntentService.class);
+        intent.putExtra("LatLng", latLng);
+        intent.putExtra("Type", typeSearch);
+        startService(intent);
     }
 
 
     public List<Category> getData() {
-        List<Category> categoryList = new ArrayList();
+        List<Category> categoryList = new ArrayList<>();
         int[] arrCatgrIcons = {R.drawable.ic_restaurant, R.drawable.ic_park, R.drawable.ic_gasstation};
         String[] arrCatgrContent = {"Restaurant", "Park", "Gas Station"};
         int[] arrCatgrImage = {R.drawable.restaurant, R.drawable.supermarket, R.drawable.gasstation};
         int[] arrCatgrColors = {R.color.mnu_restaurant, R.color.mnu_park, R.color.mnu_gasstation};
 
         for (int i = 0; i < arrCatgrContent.length; i++) {
-
-//            Log.e("123", arrCatgrContent[i]);
             Category category = new Category();
             category.setIconID(arrCatgrIcons[i]);
             category.setName(arrCatgrContent[i]);
@@ -92,8 +121,6 @@ public class CategoryActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_category, menu);
-
-//        View layout=
 
         return true;
     }
@@ -110,5 +137,28 @@ public class CategoryActivity extends ActionBarActivity {
 //            return true;
 //        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            if (data != null) {
+                setResult(1, data);
+                finish();
+            }
+        }
+    }
+
+    public class PlaceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            progressDialog.dismiss();
+            ArrayList<Place> places = intent.getParcelableArrayListExtra("Places");
+            Intent placeIntent = new Intent(CategoryActivity.this, PlaceActivity.class);
+            placeIntent.putParcelableArrayListExtra("Places", places);
+            startActivityForResult(placeIntent, 2);
+        }
     }
 }

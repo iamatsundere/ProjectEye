@@ -1,29 +1,36 @@
 package com.example.materialdesign_actionbar;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.materialdesign_actionbar.adapter.CategoryRecyclerAdapter;
-import com.example.materialdesign_actionbar.model.Category;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     private Toolbar toolbar;
     private CategoryRecyclerAdapter catgrAdapter;
     private RecyclerView recyclerView;
+    private GoogleMap map;
+    private Location currentLocation;
+    private GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +40,26 @@ public class MainActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
-//        Log.d("123", String.valueOf(R.color.mnu_gasstation).format("#%02x%02x%02x"));
+
+        init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpMap();
+        googleApiClient.connect();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (googleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    googleApiClient, this);
+            googleApiClient.disconnect();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,9 +76,75 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.mnu_edit) {
-            startActivity(new Intent(this, EditActivity.class));
+            Intent intent = new Intent(this, EditActivity.class);
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            intent.putExtra("LatLng", latLng);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        if (currentLocation != null) {
+            handleLocation(currentLocation);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLocation = location;
+        handleLocation(location);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    /**
+     * Initialize whatever needed here :3
+     */
+    private void init() {
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+
+        locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000)
+                .setFastestInterval(5000);
+    }
+
+    /**
+     * Add a marker and move the map to the specified location
+     *
+     * @param location: the location that need handling
+     */
+    private void handleLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions marker = new MarkerOptions().position(latLng).title("You're here");
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        map.addMarker(marker);
+    }
+
+    private void setUpMap() {
+        if (map == null) {
+            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        } else if (currentLocation != null) {
+            handleLocation(currentLocation);
+        }
     }
 }

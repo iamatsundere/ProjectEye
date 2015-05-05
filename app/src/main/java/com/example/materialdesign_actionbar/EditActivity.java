@@ -1,13 +1,9 @@
 package com.example.materialdesign_actionbar;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.VectorDrawable;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,15 +13,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.materialdesign_actionbar.R;
-import com.example.materialdesign_actionbar.model.Category;
+import com.example.materialdesign_actionbar.model.Place;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class EditActivity extends ActionBarActivity {
 
     public Button btn;
-    public Intent intent;
+    private ArrayList<Place> places;
+    private LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +39,22 @@ public class EditActivity extends ActionBarActivity {
         imageView.setVisibility(View.VISIBLE);
 
         setSupportActionBar(toolbar);
-//
         ImageView btnBack = (ImageView) findViewById(R.id.mnu_back);
         btnBack.setOnClickListener(onClickBack);
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        intent = new Intent(this, MainActivity.class);
+        places = new ArrayList<>();
+        Intent intent = getIntent();
+        latLng = intent.getParcelableExtra("LatLng");
+
     }
 
     private View.OnClickListener onClickBack = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
-            startActivity(intent);
+            finish();
         }
     };
 
@@ -69,7 +68,7 @@ public class EditActivity extends ActionBarActivity {
 
     public void OnBack(View view) {
         if (view.getId() == R.id.mnu_back) {
-            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 
@@ -86,10 +85,28 @@ public class EditActivity extends ActionBarActivity {
 //        }
 
         if (id == R.id.mnu_add) {
-            startActivity(new Intent(this, CategoryActivity.class));
+            Intent intent = new Intent(this, CategoryActivity.class);
+            if (places.size() > 0) {
+                double latitude = places.get(places.size() - 1).getLat();
+                double longitude = places.get(places.size() - 1).getLng();
+                latLng = new LatLng(latitude, longitude);
+            }
+            intent.putExtra("LatLng", latLng);
+            startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (data != null) {
+                Place place = data.getParcelableExtra("Place");
+                Log.d("Received place: ", place.getName() + " " + place.getAddress());
+                places.add(place);
+            }
+        }
+    }
 }

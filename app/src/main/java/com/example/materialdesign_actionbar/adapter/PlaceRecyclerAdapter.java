@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.materialdesign_actionbar.CategoryActivity;
 import com.example.materialdesign_actionbar.EditActivity;
 import com.example.materialdesign_actionbar.PlaceActivity;
 import com.example.materialdesign_actionbar.R;
@@ -34,6 +35,10 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
     private LayoutInflater inflater;
     private List<Place> placeList = Collections.emptyList();
     private Context context;
+
+
+    private int[] arrPlaceColors = {R.color.mnu_restaurant, R.color.mnu_park, R.color.mnu_gasstation};
+    private int[] arrPlaceIcons = {R.drawable.ic_restaurant, R.drawable.ic_park, R.drawable.ic_gasstation};
 
     public PlaceRecyclerAdapter(List<Place> placeList, Context context) {
         this.placeList = placeList;
@@ -61,10 +66,10 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
     public void onBindViewHolder(PlaceViewHolder holder, int position) {
         final Place currentItem = placeList.get(position);
         holder.placeName.setText(currentItem.getName());
-        holder.placeIcon.setImageResource(currentItem.geticonID());
+        holder.placeIcon.setImageResource(arrPlaceIcons[CategoryActivity.typeID]);
         holder.placeAddress.setText(currentItem.getAddress());
-        holder.placeDistance.setText(String.valueOf(currentItem.getDistance()));
-        holder.placeColor.setBackgroundColor(currentItem.getColorID());
+        holder.placeDistance.setText(String.valueOf(currentItem.getDistanceInDrivingMode()));
+        holder.placeColor.setBackgroundColor(arrPlaceColors[CategoryActivity.typeID]);
         holder.placeCardView.setId(position);
     }
 

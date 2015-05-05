@@ -2,9 +2,8 @@ package com.example.materialdesign_actionbar;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.VectorDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +19,6 @@ import com.example.materialdesign_actionbar.adapter.PlaceRecyclerAdapter;
 import com.example.materialdesign_actionbar.model.Place;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 
 public class PlaceActivity extends ActionBarActivity {
@@ -30,6 +27,8 @@ public class PlaceActivity extends ActionBarActivity {
     private int[] arrPlaceColors = {R.color.mnu_restaurant, R.color.mnu_park, R.color.mnu_gasstation};
     private int[] arrPlaceIcons = {R.drawable.ic_restaurant, R.drawable.ic_park, R.drawable.ic_gasstation};
     private String[] arrCatgr = {"RESTAURANT", "PARK", "GAS STATION"};
+
+    private ArrayList<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,39 +45,35 @@ public class PlaceActivity extends ActionBarActivity {
         imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
-//        VectorDrawable view=new VectorDrawable(getResources().getXml(R.drawable.chevron_left));
-//        view.setBackgroundColor(getResources().getColor(R.color.mnu_park));
+        places = getData();
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
         rc.setLayoutManager(new LinearLayoutManager(this));
-        PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(getData(), this);
+        PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(places, this);
         rc.setAdapter(placeAdapter);
-
-
     }
 
 
     public void OnBack(View view) {
         if (view.getId() == R.id.mnu_back) {
-            startActivity(new Intent(this, CategoryActivity.class));
+            finish();
         }
-    }
-    public void OnRowClick(View v) {
-        startActivity(new Intent(this,EditActivity.class));
     }
 
-    private List<Place> getData() {
-        List<Place> placeList = new ArrayList<Place>();
-        Place tempPlace;
-        for (int i = 0; i < 1000; i++) {
-            tempPlace = new Place();
-            tempPlace.setName("Place Number " + String.valueOf(i));
-            tempPlace.setAddress("10074 Palo Alto CA");
-            tempPlace.setColorID(getResources().getColor(arrPlaceColors[CategoryActivity.typeID]));
-            tempPlace.setDistance((double) i);
-            tempPlace.seticonID(arrPlaceIcons[CategoryActivity.typeID]);
-            placeList.add(tempPlace);
-        }
+    public void OnRowClick(View v) {
+        View cd = (View) v.getParent().getParent();
+        int position = cd.getId();
+        Log.e("123", String.valueOf(position));
+//        Intent intent = new Intent();
+//        Place place = places.get(position);
+//        intent.putExtra("Place", place);
+//        setResult(1, intent);
+//        finish();
+    }
+
+    private ArrayList<Place> getData() {
+        Intent intent = getIntent();
+        ArrayList<Place> placeList = intent.getParcelableArrayListExtra("Places");
         return placeList;
     }
 

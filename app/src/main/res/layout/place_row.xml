@@ -11,6 +11,7 @@
     android:onClick="OnRowClick">
 
     <RelativeLayout
+        android:id="@+id/relativelayout_place"
         android:layout_width="match_parent"
         android:layout_height="84dp"
         android:layout_marginBottom="2dp"
