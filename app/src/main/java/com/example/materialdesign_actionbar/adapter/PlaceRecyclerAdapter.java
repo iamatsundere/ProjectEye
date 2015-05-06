@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.InstrumentationInfo;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 import com.example.materialdesign_actionbar.CategoryActivity;
 import com.example.materialdesign_actionbar.EditActivity;
@@ -37,7 +40,7 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
     private Context context;
 
 
-    private int[] arrPlaceColors = {R.color.mnu_restaurant, R.color.mnu_park, R.color.mnu_gasstation};
+    private String[] arrPlaceColors = {"#C41D63","#40b654","#FAAA18"};
     private int[] arrPlaceIcons = {R.drawable.ic_restaurant, R.drawable.ic_park, R.drawable.ic_gasstation};
 
     public PlaceRecyclerAdapter(List<Place> placeList, Context context) {
@@ -69,7 +72,8 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
         holder.placeIcon.setImageResource(arrPlaceIcons[CategoryActivity.typeID]);
         holder.placeAddress.setText(currentItem.getAddress());
         holder.placeDistance.setText(String.valueOf(currentItem.getDistanceInDrivingMode()));
-        holder.placeColor.setBackgroundColor(arrPlaceColors[CategoryActivity.typeID]);
+        holder.placeColor.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        holder.placeColor.setBackgroundColor(Color.parseColor(arrPlaceColors[CategoryActivity.typeID]));
         holder.placeCardView.setId(position);
     }
 
