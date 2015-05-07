@@ -46,12 +46,6 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
-        getData();
-
-        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
-        rc.setLayoutManager(new LinearLayoutManager(this));
-        placeAdapter = new PlaceRecyclerAdapter(places, this);
-        rc.setAdapter(placeAdapter);
     }
 
     public void OnBack(View view) {
@@ -60,14 +54,31 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         }
     }
 
+    @Override
+    protected  void onResume()
+    {
+        getData();
+
+        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+        rc.setLayoutManager(new LinearLayoutManager(this));
+        placeAdapter = new PlaceRecyclerAdapter(places, this);
+        rc.setAdapter(placeAdapter);
+        super.onResume();
+    }
+
     public void OnRowClick(View v) {
-        while (!(v instanceof CardView)) {
-            v = (View) v.getParent();
+
+        View tempView = v;
+        while (!(tempView instanceof CardView)) {
+            tempView = (View) tempView.getParent();
         }
-        CardView cd = (CardView) findViewById(v.getId());
+        CardView cd = (CardView) findViewById(tempView.getId());
         int position = cd.getId();
+
         Intent intent = new Intent();
         Place place = places.get(position);
+        EditActivity.myList.add((place));
+
         intent.putExtra("Place", place);
         setResult(1, intent);
         finish();
@@ -80,6 +91,7 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         for (int i = 0; i < places.size(); i++) {
             places.get(i).setListener(this);
             places.get(i).getDistance(latLng);
+            places.get(i).setTypeID(CategoryActivity.typeID);
         }
     }
 

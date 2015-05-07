@@ -69,12 +69,13 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
     public void onBindViewHolder(PlaceViewHolder holder, int position) {
         final Place currentItem = placeList.get(position);
         holder.placeName.setText(currentItem.getName());
-        holder.placeIcon.setImageResource(arrPlaceIcons[CategoryActivity.typeID]);
+        holder.placeIcon.setImageResource(arrPlaceIcons[currentItem.getTypeID()]);
         holder.placeAddress.setText(currentItem.getAddress());
         holder.placeDistance.setText(String.valueOf(currentItem.getDistanceInDrivingMode()));
 //        holder.placeColor.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        holder.placeColor.setBackgroundColor(Color.parseColor(arrPlaceColors[CategoryActivity.typeID]));
+        holder.placeColor.setBackgroundColor(Color.parseColor(arrPlaceColors[currentItem.getTypeID()]));
         holder.placeCardView.setId(position);
+        Log.e("TYPEOD",String.valueOf(currentItem.getTypeID()));
     }
 
     @Override

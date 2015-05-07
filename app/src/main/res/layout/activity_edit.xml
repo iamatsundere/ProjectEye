@@ -9,26 +9,29 @@
         layout="@layout/app_bar" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/vehicle_distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/app_bar"
         android:background="@color/primaryColor"
-        android:layout_below="@+id/app_bar">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/tab1"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:onClick="onVehiceDistance">
 
             <ImageView
                 android:id="@+id/icon_dis_walk"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_walk"/>
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_walk"
+                android:onClick="onVehiceDistance" />
 
 
             <TextView
@@ -38,49 +41,52 @@
                 android:gravity="center"
                 android:text="abc km"
                 android:textColor="#FFFFFF"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:onClick="onVehiceDistance" />
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:id="@+id/tab2"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
+        <!--android:id="@+id/tab2"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1">-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/icon_dis_bicycle"-->
-                <!--android:layout_marginTop="4dp"-->
-                <!--android:layout_marginBottom="4dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="48dp"-->
-                <!--android:src="@drawable/ic_bicycle" />-->
+        <!--<ImageView-->
+        <!--android:id="@+id/icon_dis_bicycle"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:src="@drawable/ic_bicycle" />-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/text_dis_bicycle"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center"-->
-                <!--android:text="abc km"-->
-                <!--android:textColor="#FFFFFF"-->
-                <!--android:visibility="invisible"/>-->
+        <!--<TextView-->
+        <!--android:id="@+id/text_dis_bicycle"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="abc km"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:visibility="invisible"/>-->
 
         <!--</LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/tab3"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:onClick="onVehiceDistance">
 
             <ImageView
                 android:id="@+id/icon_dis_car"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_car" />
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_car"
+                android:onClick="onVehiceDistance" />
 
             <TextView
                 android:id="@+id/text_dis_car"
@@ -89,47 +95,52 @@
                 android:gravity="center"
                 android:text="abc km"
                 android:textColor="#FFFFFF"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:onClick="onVehiceDistance" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tab4"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:onClick="onVehiceDistance">
 
             <ImageView
                 android:id="@+id/icon_dis_bus"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_bus" />
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_bus"
+                android:onClick="onVehiceDistance" />
 
             <TextView
-                android:layout_above="@+id/icon_dis_bus"
                 android:id="@+id/text_dis_bus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/icon_dis_bus"
                 android:gravity="center"
                 android:text="abc km"
                 android:textColor="#FFFFFF"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:onClick="onVehiceDistance" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!--<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:id="@+id/recycler_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/app_bar"-->
-    <!--android:scrollbars="vertical"-->
-    <!--android:layout_marginTop="8dp">-->
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@+id/vehicle_distance"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:scrollbars="vertical"
+        android:background="#FFFFFF">
 
-    <!--</android.support.v7.widget.RecyclerView>-->
+    </android.support.v7.widget.RecyclerView>
 
 
 </RelativeLayout>

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,15 +15,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.materialdesign_actionbar.adapter.PlaceRecyclerAdapter;
 import com.example.materialdesign_actionbar.model.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EditActivity extends ActionBarActivity {
 
     public Button btn;
     private ArrayList<Place> places;
+    public static ArrayList<Place> myList;
     private LatLng latLng;
 
     @Override
@@ -45,9 +50,16 @@ public class EditActivity extends ActionBarActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         places = new ArrayList<>();
+        myList=new ArrayList<Place>();
         Intent intent = getIntent();
         latLng = intent.getParcelableExtra("LatLng");
 
+
+//        Log.e("123",String.valueOf(myList.size()));
+        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+        rc.setLayoutManager(new LinearLayoutManager(this));
+        PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(getListPlace(), this);
+        rc.setAdapter(placeAdapter);
     }
 
     private View.OnClickListener onClickBack = new View.OnClickListener() {
@@ -58,6 +70,33 @@ public class EditActivity extends ActionBarActivity {
         }
     };
 
+    public void onVehiceDistance(View v)
+    {
+
+    }
+
+    public List<Place> getListPlace() {
+        if (!places.isEmpty()) {
+            Log.e("123",String.valueOf(places.size()));
+            Place tempPlace;
+            for (int i = 0; i < places.size(); i++) {
+//                tempPlace = places.get(i);
+//                places.get(i).seticonID(tempPlace.getTypeID());
+//                places.get(i).setColorID(tempPlace.getTypeID());
+            }
+        }
+        return places;
+    }
+
+    @Override
+    protected  void onResume()
+    {
+        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+        rc.setLayoutManager(new LinearLayoutManager(this));
+        PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(myList, this);
+        rc.setAdapter(placeAdapter);
+        super.onResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,7 +143,7 @@ public class EditActivity extends ActionBarActivity {
         if (requestCode == 1) {
             if (data != null) {
                 Place place = data.getParcelableExtra("Place");
-                Log.d("Received place: ", place.getName() + " " + place.getAddress());
+//                Log.d("Received place: ", place.getName() + " " + place.getAddress());
                 places.add(place);
             }
         }

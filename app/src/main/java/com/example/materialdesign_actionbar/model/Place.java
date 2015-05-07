@@ -121,7 +121,7 @@ public class Place implements Parcelable {
         return this.typeID;
     }
 
-    public void getTypeID(int typeID) {
+    public void setTypeID(int typeID) {
         this.typeID = typeID;
     }
 
