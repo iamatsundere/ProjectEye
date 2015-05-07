@@ -72,7 +72,7 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
         holder.placeIcon.setImageResource(arrPlaceIcons[CategoryActivity.typeID]);
         holder.placeAddress.setText(currentItem.getAddress());
         holder.placeDistance.setText(String.valueOf(currentItem.getDistanceInDrivingMode()));
-        holder.placeColor.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//        holder.placeColor.setBackgroundColor(Color.parseColor("#FFFFFF"));
         holder.placeColor.setBackgroundColor(Color.parseColor(arrPlaceColors[CategoryActivity.typeID]));
         holder.placeCardView.setId(position);
     }

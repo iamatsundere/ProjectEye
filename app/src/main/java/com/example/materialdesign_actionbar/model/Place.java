@@ -1,7 +1,14 @@
 package com.example.materialdesign_actionbar.model;
 
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.materialdesign_actionbar.JSONReader;
+import com.example.materialdesign_actionbar.OnGetDistanceListener;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.concurrent.Executors;
 
 /**
  * Created by Phuc on 4/29/2015.
@@ -16,6 +23,7 @@ public class Place implements Parcelable {
     int iconID;
     int colorID;
     int typeID;
+    private OnGetDistanceListener listener;
 
     public Place() {
 
@@ -41,6 +49,9 @@ public class Place implements Parcelable {
         this.iconID = source.readInt();
     }
 
+    public void setListener(OnGetDistanceListener listener) {
+        this.listener = listener;
+    }
 
     public String getName() {
         return name;
@@ -128,6 +139,35 @@ public class Place implements Parcelable {
         dest.writeDouble(this.distanceInDrivingMode);
         dest.writeDouble(this.distanceInWalkingMode);
         dest.writeInt(this.iconID);
+    }
+
+    public void getDistance(final LatLng latLng) {
+        AsyncTask asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    String distanceUrl = JSONReader.getDistanceUrl(Place.this.lat, Place.this.lng, 1, latLng);
+                    String JSONFile = JSONReader.getJSONFile(distanceUrl);
+                    Place.this.distanceInDrivingMode = JSONReader.readDistanceJSONFile(JSONFile);
+
+                    distanceUrl = JSONReader.getDistanceUrl(Place.this.lat, Place.this.lng, 2, latLng);
+                    JSONFile = JSONReader.getJSONFile(distanceUrl);
+                    Place.this.distanceInWalkingMode = JSONReader.readDistanceJSONFile(JSONFile);
+                } catch (Exception ex) {
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if(Place.this.listener!=null){
+                    Place.this.listener.onFinish();
+                }
+            }
+        };
+        asyncTask.executeOnExecutor(Executors.newFixedThreadPool(10), null);
     }
 
     public final static Creator<Place> CREATOR = new Creator<Place>() {

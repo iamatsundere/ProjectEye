@@ -90,14 +90,13 @@ public class CategoryActivity extends ActionBarActivity {
         } else if (typeID == 1) {
             typeSearch = "park";
         } else {
-            typeSearch = "gas";
+            typeSearch = "gas_station";
         }
         Intent intent = new Intent(this, GetPlacesIntentService.class);
         intent.putExtra("LatLng", latLng);
         intent.putExtra("Type", typeSearch);
         startService(intent);
     }
-
 
     public List<Category> getData() {
         List<Category> categoryList = new ArrayList<>();
@@ -157,6 +156,7 @@ public class CategoryActivity extends ActionBarActivity {
             progressDialog.dismiss();
             ArrayList<Place> places = intent.getParcelableArrayListExtra("Places");
             Intent placeIntent = new Intent(CategoryActivity.this, PlaceActivity.class);
+            placeIntent.putExtra("LatLng", latLng);
             placeIntent.putParcelableArrayListExtra("Places", places);
             startActivityForResult(placeIntent, 2);
         }

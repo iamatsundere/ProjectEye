@@ -59,6 +59,7 @@
         <service
             android:name=".GetPlacesIntentService"
             android:exported="false" />
+
     </application>
 
 </manifest>
