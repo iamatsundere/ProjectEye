@@ -63,6 +63,11 @@ public class JSONReader {
         return googleDistanceUrl.toString();
     }
 
+    public static String getDirectionUrl(LatLng origin, LatLng destination, int mode){
+        StringBuilder googleDirectionUrl=new StringBuilder();
+        return googleDirectionUrl.toString();
+    }
+
     public static String getJSONFile(String url) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         HttpClient httpClient = new DefaultHttpClient();
