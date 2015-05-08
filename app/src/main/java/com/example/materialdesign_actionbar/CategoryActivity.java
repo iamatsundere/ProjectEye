@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ public class CategoryActivity extends ActionBarActivity {
     private PlaceReceiver placeReceiver;
     private LatLng latLng;
     private ProgressDialog progressDialog;
+    private IntentFilter addressFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,8 @@ public class CategoryActivity extends ActionBarActivity {
         toolbar.setElevation(.5f);
         TextView txt = (TextView) findViewById(R.id.app_bar_title);
         txt.setText("LOCATION");
-        ImageView imageView = (ImageView) findViewById(R.id.mnu_back);
-        imageView.setVisibility(View.VISIBLE);
+//        ImageView imageView = (ImageView) findViewById(R.id.mnu_back);
+//        imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
@@ -62,7 +64,7 @@ public class CategoryActivity extends ActionBarActivity {
         latLng = intent.getParcelableExtra("LatLng");
 
         // Register get place intent service
-        IntentFilter addressFilter = new IntentFilter("Broadcast address");
+        addressFilter = new IntentFilter("Broadcast address");
         placeReceiver = new PlaceReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(placeReceiver, addressFilter);
     }
@@ -143,10 +145,19 @@ public class CategoryActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 2) {
             if (data != null) {
-                setResult(1, data);
+                Place place=data.getParcelableExtra("Place");
+                Intent intent=new Intent();
+                intent.putExtra("Place",place);
+                setResult(1, intent);
                 finish();
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(CategoryActivity.this).unregisterReceiver(placeReceiver);
     }
 
     public class PlaceReceiver extends BroadcastReceiver {

@@ -30,6 +30,7 @@ public class EditActivity extends ActionBarActivity {
     public static ArrayList<Place> myList;
     private LatLng latLng;
     private TextView text_dis_walk, text_dis_car;
+    private PlaceRecyclerAdapter placeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +49,16 @@ public class EditActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         ImageView btnBack = (ImageView) findViewById(R.id.mnu_back);
         btnBack.setOnClickListener(onClickBack);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         places = new ArrayList<>();
         myList = new ArrayList<Place>();
         Intent intent = getIntent();
         latLng = intent.getParcelableExtra("LatLng");
+        myList=intent.getParcelableArrayListExtra("Places");
 
-
-//        Log.e("123",String.valueOf(myList.size()));
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
         rc.setLayoutManager(new LinearLayoutManager(this));
-        PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(getListPlace(), this);
+        placeAdapter = new PlaceRecyclerAdapter(places, this);
         rc.setAdapter(placeAdapter);
 
         text_dis_car = (TextView) findViewById(R.id.text_dis_car);
@@ -71,41 +69,36 @@ public class EditActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
-            finish();
+                Intent intent=new Intent();
+                intent.putParcelableArrayListExtra("Places",myList);
+                setResult(1,intent);
+                finish();
         }
     };
 
     public void onVehiceDistance(View v) {
-        LinearLayout linearLayout = (LinearLayout) v;
-        switch (linearLayout.getId()) {
-            case R.id.tab1:
-                double distanceInWalkingMode = 0;
-                for (Place place : places) {
-                    distanceInWalkingMode += place.getDistanceInWalkingMode();
-                }
-                text_dis_walk.setText("Total distance: " + distanceInWalkingMode + " km");
-                break;
-            case R.id.tab3:
-                double distanceInDrivingMode = 0;
-                for (Place place : places) {
-                    distanceInDrivingMode += place.getDistanceInDrivingMode();
-                }
-                text_dis_walk.setText("Total distance: " + distanceInDrivingMode + " km");
-                break;
-        }
-    }
-
-    public List<Place> getListPlace() {
-        if (!places.isEmpty()) {
-            Log.e("123", String.valueOf(places.size()));
-            Place tempPlace;
-            for (int i = 0; i < places.size(); i++) {
-//                tempPlace = places.get(i);
-//                places.get(i).seticonID(tempPlace.getTypeID());
-//                places.get(i).setColorID(tempPlace.getTypeID());
+        if(places.size()>0) {
+            LinearLayout linearLayout = (LinearLayout) v.getParent();
+            Log.e("Id",""+linearLayout.getId());
+            switch (linearLayout.getId()) {
+                case R.id.tab1:
+                    double distanceInWalkingMode = 0;
+                    for (Place place : places) {
+                        distanceInWalkingMode += place.getDistanceInWalkingMode();
+                    }
+                    text_dis_walk.setText("Total distance: " + distanceInWalkingMode + " km");
+                    text_dis_car.setText("");
+                    break;
+                case R.id.tab3:
+                    double distanceInDrivingMode = 0;
+                    for (Place place : places) {
+                        distanceInDrivingMode += place.getDistanceInDrivingMode();
+                    }
+                    text_dis_walk.setText("Total distance: " + distanceInDrivingMode + " km");
+                    text_dis_walk.setText("");
+                    break;
             }
         }
-        return places;
     }
 
     @Override
@@ -124,23 +117,12 @@ public class EditActivity extends ActionBarActivity {
         return true;
     }
 
-    public void OnBack(View view) {
-        if (view.getId() == R.id.mnu_back) {
-            finish();
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         if (id == R.id.mnu_add) {
             Intent intent = new Intent(this, CategoryActivity.class);
@@ -162,8 +144,8 @@ public class EditActivity extends ActionBarActivity {
         if (requestCode == 1) {
             if (data != null) {
                 Place place = data.getParcelableExtra("Place");
-//                Log.d("Received place: ", place.getName() + " " + place.getAddress());
                 places.add(place);
+                placeAdapter.notifyDataSetChanged();
             }
         }
     }

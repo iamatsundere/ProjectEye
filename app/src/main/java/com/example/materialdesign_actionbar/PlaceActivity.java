@@ -43,8 +43,6 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         TextView txt = (TextView) findViewById(R.id.app_bar_title);
         txt.setText(arrCatgr[CategoryActivity.typeID]);
         txt.setTextColor(getResources().getColor(arrPlaceColors[CategoryActivity.typeID]));
-        ImageView imageView = (ImageView) findViewById(R.id.mnu_back);
-        imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
         getData();
@@ -57,7 +55,6 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
 
     public void OnBack(View view) {
         if (view.getId() == R.id.mnu_back) {
-//            super.onDestroy();
             finish();
         }
     }
@@ -87,8 +84,8 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         EditActivity.myList.add((place));
 
         intent.putExtra("Place", place);
-        setResult(1, intent);
-//        super.onDestroy();
+        setResult(2, intent);
+//        super.onStop();
         finish();
     }
 

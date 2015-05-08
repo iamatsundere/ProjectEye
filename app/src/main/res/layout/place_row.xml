@@ -51,7 +51,7 @@
             <TextView
                 android:id="@+id/place_name"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="22dp"
                 android:layout_marginLeft="16dp"
                 android:layout_toEndOf="@+id/catgr_icon"
                 android:gravity="center_vertical"
@@ -74,16 +74,25 @@
 
             <TextView
                 android:id="@+id/place_distance"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_below="@+id/place_address"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical"
-                android:text="0.2 km"
+                android:text="0.2"
                 android:textColor="#000"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:onClick="OnRowClick" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_below="@+id/place_address"
+                android:layout_toRightOf="@+id/place_distance"
+                android:gravity="center_vertical"
+                android:textColor="#000"
+                android:text=" km"
+                android:textSize="12dp"
+                android:onClick="OnRowClick" />
         </RelativeLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

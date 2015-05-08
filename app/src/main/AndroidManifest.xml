@@ -35,17 +35,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-<<<<<<< HEAD
-            android:value="AIzaSyCV5E6kt3oLFoabk1Jyd3W33UERhnYbCig
-            " />
+            android:value="AIzaSyCV5E6kt3oLFoabk1Jyd3W33UERhnYbCig"/>
             <!--android:value="AIzaSyCP6hdcYWyUFWebpuYmKSHnTbuIIB60Q2E" />-->
-=======
-            android:value="AIzaSyAnkMd-0tg6LCv26A5vtWOdM0kZiNNKrbY" />
->>>>>>> origin/Dong
 
         <activity
             android:name=".MainActivity"
-            android:label="">
+            android:label="Project Eye">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

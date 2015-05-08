@@ -8,9 +8,9 @@
         android:orderInCategory="2"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/mnu_navigate"
-        android:title="mnu_navigate"
-        android:icon="@drawable/ic_navigate"
-        android:orderInCategory="1"
-        app:showAsAction="always"/>
+    <!--<item android:id="@+id/mnu_navigate"-->
+        <!--android:title="mnu_navigate"-->
+        <!--android:icon="@drawable/ic_navigate"-->
+        <!--android:orderInCategory="1"-->
+        <!--app:showAsAction="always"/>-->
 </menu>

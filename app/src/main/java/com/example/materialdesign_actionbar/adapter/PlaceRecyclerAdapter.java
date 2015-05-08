@@ -54,16 +54,9 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.place_row, null);
         PlaceViewHolder catgrVH = new PlaceViewHolder(view);
         CardView card = (CardView) view;
-        card.setOnClickListener(placeOnClick);
         return catgrVH;
     }
 
-    private View.OnClickListener placeOnClick = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-        }
-    };
 
     @Override
     public void onBindViewHolder(PlaceViewHolder holder, int position) {
@@ -72,10 +65,8 @@ public class PlaceRecyclerAdapter extends RecyclerView.Adapter<PlaceViewHolder> 
         holder.placeIcon.setImageResource(arrPlaceIcons[currentItem.getTypeID()]);
         holder.placeAddress.setText(currentItem.getAddress());
         holder.placeDistance.setText(String.valueOf(currentItem.getDistanceInDrivingMode()));
-//        holder.placeColor.setBackgroundColor(Color.parseColor("#FFFFFF"));
         holder.placeColor.setBackgroundColor(Color.parseColor(arrPlaceColors[currentItem.getTypeID()]));
         holder.placeCardView.setId(position);
-        Log.e("TYPEOD",String.valueOf(currentItem.getTypeID()));
     }
 
     @Override
