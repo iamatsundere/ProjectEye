@@ -49,6 +49,7 @@ public class Place implements Parcelable {
         this.distanceInDrivingMode = source.readDouble();
         this.distanceInWalkingMode = source.readDouble();
         this.iconID = source.readInt();
+        this.placeId=source.readString();
     }
 
     public void setListener(OnGetDistanceListener listener) {
@@ -119,14 +120,6 @@ public class Place implements Parcelable {
         this.distanceInWalkingMode = distanceInWalkingMode;
     }
 
-    public int getColorID() {
-        return this.colorID;
-    }
-
-    public void setColorID(int colorID) {
-        this.colorID = colorID;
-    }
-
     public int getTypeID() {
         return this.typeID;
     }
@@ -149,17 +142,17 @@ public class Place implements Parcelable {
         dest.writeDouble(this.distanceInDrivingMode);
         dest.writeDouble(this.distanceInWalkingMode);
         dest.writeInt(this.iconID);
+        dest.writeString(this.placeId);
     }
 
-    public void getFormattedAddress(){
+    public void getFormattedAddress() {
         AsyncTask asyncTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
                     String placeDetailUrl = JSONReader.getPlaceDetailUrl(Place.this.placeId);
                     String placeDetailJSONFile = JSONReader.getJSONFile(placeDetailUrl);
-                    Place.this.address=JSONReader.readPlaceDetailJSONFile(placeDetailJSONFile);
-                    Log.e("Address", Place.this.address);
+                    Place.this.address = JSONReader.readPlaceDetailJSONFile(placeDetailJSONFile);
                 } catch (Exception ex) {
 
                 }
@@ -169,7 +162,7 @@ public class Place implements Parcelable {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                if(Place.this.listener!=null){
+                if (Place.this.listener != null) {
                     Place.this.listener.onFinish(1);
                 }
             }
@@ -198,7 +191,7 @@ public class Place implements Parcelable {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                if(Place.this.listener!=null){
+                if (Place.this.listener != null) {
                     Place.this.listener.onFinish(2);
                 }
             }

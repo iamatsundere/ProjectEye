@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,7 +98,7 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         latLng = intent.getParcelableExtra("LatLng");
         for (int i = 0; i < places.size(); i++) {
             places.get(i).setListener(this);
-//            places.get(i).getFormattedAddress();
+            places.get(i).getFormattedAddress();
             places.get(i).getDistance(latLng);
             places.get(i).setTypeID(CategoryActivity.typeID);
         }
