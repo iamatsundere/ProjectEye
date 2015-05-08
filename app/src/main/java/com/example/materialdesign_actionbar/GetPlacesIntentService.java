@@ -57,6 +57,7 @@ public class GetPlacesIntentService extends IntentService {
                         place.seticonID(R.drawable.ic_gasstation);
                     }
 
+                    place.setPlaceId(placeId);
                     // Get address of the found location
                     String placeDetailUrl = JSONReader.getPlaceDetailUrl(placeId);
                     String placeDetailJSONFile = JSONReader.getJSONFile(placeDetailUrl);
