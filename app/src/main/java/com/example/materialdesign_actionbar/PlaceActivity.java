@@ -46,10 +46,17 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
+        getData();
+
+        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+        rc.setLayoutManager(new LinearLayoutManager(this));
+        placeAdapter = new PlaceRecyclerAdapter(places, this);
+        rc.setAdapter(placeAdapter);
     }
 
     public void OnBack(View view) {
         if (view.getId() == R.id.mnu_back) {
+//            super.onDestroy();
             finish();
         }
     }
@@ -80,6 +87,7 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
 
         intent.putExtra("Place", place);
         setResult(1, intent);
+//        super.onDestroy();
         finish();
     }
 
