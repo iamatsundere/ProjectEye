@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.materialdesign_actionbar.adapter.PlaceRecyclerAdapter;
@@ -28,6 +29,7 @@ public class EditActivity extends ActionBarActivity {
     private ArrayList<Place> places;
     public static ArrayList<Place> myList;
     private LatLng latLng;
+    private TextView text_dis_walk, text_dis_car;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class EditActivity extends ActionBarActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         places = new ArrayList<>();
-        myList=new ArrayList<Place>();
+        myList = new ArrayList<Place>();
         Intent intent = getIntent();
         latLng = intent.getParcelableExtra("LatLng");
 
@@ -60,6 +62,9 @@ public class EditActivity extends ActionBarActivity {
         rc.setLayoutManager(new LinearLayoutManager(this));
         PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(getListPlace(), this);
         rc.setAdapter(placeAdapter);
+
+        text_dis_car = (TextView) findViewById(R.id.text_dis_car);
+        text_dis_walk = (TextView) findViewById(R.id.text_dis_walk);
     }
 
     private View.OnClickListener onClickBack = new View.OnClickListener() {
@@ -70,14 +75,29 @@ public class EditActivity extends ActionBarActivity {
         }
     };
 
-    public void onVehiceDistance(View v)
-    {
-
+    public void onVehiceDistance(View v) {
+        LinearLayout linearLayout = (LinearLayout) v;
+        switch (linearLayout.getId()) {
+            case R.id.tab1:
+                double distanceInWalkingMode = 0;
+                for (Place place : places) {
+                    distanceInWalkingMode += place.getDistanceInWalkingMode();
+                }
+                text_dis_walk.setText("Total distance: " + distanceInWalkingMode + " km");
+                break;
+            case R.id.tab3:
+                double distanceInDrivingMode = 0;
+                for (Place place : places) {
+                    distanceInDrivingMode += place.getDistanceInDrivingMode();
+                }
+                text_dis_walk.setText("Total distance: " + distanceInDrivingMode + " km");
+                break;
+        }
     }
 
     public List<Place> getListPlace() {
         if (!places.isEmpty()) {
-            Log.e("123",String.valueOf(places.size()));
+            Log.e("123", String.valueOf(places.size()));
             Place tempPlace;
             for (int i = 0; i < places.size(); i++) {
 //                tempPlace = places.get(i);
@@ -89,8 +109,7 @@ public class EditActivity extends ActionBarActivity {
     }
 
     @Override
-    protected  void onResume()
-    {
+    protected void onResume() {
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
         rc.setLayoutManager(new LinearLayoutManager(this));
         PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(myList, this);

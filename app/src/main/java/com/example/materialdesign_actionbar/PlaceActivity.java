@@ -55,8 +55,7 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
     }
 
     @Override
-    protected  void onResume()
-    {
+    protected void onResume() {
         getData();
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
@@ -90,6 +89,7 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         latLng = intent.getParcelableExtra("LatLng");
         for (int i = 0; i < places.size(); i++) {
             places.get(i).setListener(this);
+//            places.get(i).getFormattedAddress();
             places.get(i).getDistance(latLng);
             places.get(i).setTypeID(CategoryActivity.typeID);
         }
@@ -113,8 +113,10 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
     }
 
     @Override
-    public void onFinish() {
-        sortAscending(places);
+    public void onFinish(int flag) {
+        if (flag == 2) {
+            sortAscending(places);
+        }
         placeAdapter.notifyDataSetChanged();
     }
 

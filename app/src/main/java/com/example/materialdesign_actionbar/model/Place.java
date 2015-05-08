@@ -3,6 +3,7 @@ package com.example.materialdesign_actionbar.model;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.example.materialdesign_actionbar.JSONReader;
 import com.example.materialdesign_actionbar.OnGetDistanceListener;
@@ -16,6 +17,7 @@ import java.util.concurrent.Executors;
 public class Place implements Parcelable {
     String name;
     String address;
+    String placeId;
     double lat; // latitude
     double lng; // longitude
     double distanceInDrivingMode;
@@ -51,6 +53,14 @@ public class Place implements Parcelable {
 
     public void setListener(OnGetDistanceListener listener) {
         this.listener = listener;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
     public String getName() {
@@ -141,6 +151,32 @@ public class Place implements Parcelable {
         dest.writeInt(this.iconID);
     }
 
+    public void getFormattedAddress(){
+        AsyncTask asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    String placeDetailUrl = JSONReader.getPlaceDetailUrl(Place.this.placeId);
+                    String placeDetailJSONFile = JSONReader.getJSONFile(placeDetailUrl);
+                    Place.this.address=JSONReader.readPlaceDetailJSONFile(placeDetailJSONFile);
+                    Log.e("Address", Place.this.address);
+                } catch (Exception ex) {
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if(Place.this.listener!=null){
+                    Place.this.listener.onFinish(1);
+                }
+            }
+        };
+        asyncTask.executeOnExecutor(Executors.newFixedThreadPool(20), null);
+    }
+
     public void getDistance(final LatLng latLng) {
         AsyncTask asyncTask = new AsyncTask() {
             @Override
@@ -163,11 +199,11 @@ public class Place implements Parcelable {
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
                 if(Place.this.listener!=null){
-                    Place.this.listener.onFinish();
+                    Place.this.listener.onFinish(2);
                 }
             }
         };
-        asyncTask.executeOnExecutor(Executors.newFixedThreadPool(10), null);
+        asyncTask.executeOnExecutor(Executors.newFixedThreadPool(20), null);
     }
 
     public final static Creator<Place> CREATOR = new Creator<Place>() {
