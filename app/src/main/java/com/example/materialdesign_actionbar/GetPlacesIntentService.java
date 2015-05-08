@@ -58,12 +58,6 @@ public class GetPlacesIntentService extends IntentService {
                     }
 
                     place.setPlaceId(placeId);
-                    // Get address of the found location
-                    String placeDetailUrl = JSONReader.getPlaceDetailUrl(placeId);
-                    String placeDetailJSONFile = JSONReader.getJSONFile(placeDetailUrl);
-                    String address = JSONReader.readPlaceDetailJSONFile(placeDetailJSONFile);
-                    place.setAddress(address);
-                    Log.e("Address: ", place.getAddress());
 
                     places.add(place);
                 }
