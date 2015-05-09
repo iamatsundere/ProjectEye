@@ -49,8 +49,6 @@ public class CategoryActivity extends ActionBarActivity {
         toolbar.setElevation(.5f);
         TextView txt = (TextView) findViewById(R.id.app_bar_title);
         txt.setText("LOCATION");
-//        ImageView imageView = (ImageView) findViewById(R.id.mnu_back);
-//        imageView.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
@@ -62,6 +60,7 @@ public class CategoryActivity extends ActionBarActivity {
         // Get the sent latitude and longitude;
         Intent intent = getIntent();
         latLng = intent.getParcelableExtra("LatLng");
+        Log.e("LatLng", "" + latLng);
 
         // Register get place intent service
         addressFilter = new IntentFilter("Broadcast address");
@@ -70,11 +69,11 @@ public class CategoryActivity extends ActionBarActivity {
     }
 
 
-    public void OnBack(View view) {
-        if (view.getId() == R.id.mnu_back) {
-            finish();
-        }
-    }
+//    public void OnBack(View view) {
+//        if (view.getId() == R.id.mnu_back) {
+//            finish();
+//        }
+//    }
 
     public void onCategoryClick(View view) {
         CardView cd = (CardView) view.getParent().getParent();
@@ -155,8 +154,8 @@ public class CategoryActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+      protected void onDestroy() {
+        super.onDestroy();
         LocalBroadcastManager.getInstance(CategoryActivity.this).unregisterReceiver(placeReceiver);
     }
 
@@ -167,6 +166,9 @@ public class CategoryActivity extends ActionBarActivity {
             progressDialog.dismiss();
             ArrayList<Place> places = intent.getParcelableArrayListExtra("Places");
             Intent placeIntent = new Intent(CategoryActivity.this, PlaceActivity.class);
+            if(places.size()>0){
+                Log.e("Place",""+places.get(0).getName());
+            }
             placeIntent.putExtra("LatLng", latLng);
             placeIntent.putParcelableArrayListExtra("Places", places);
             startActivityForResult(placeIntent, 2);

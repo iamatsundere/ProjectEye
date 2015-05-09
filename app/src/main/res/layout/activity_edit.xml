@@ -45,32 +45,6 @@
                 android:onClick="onVehiceDistance" />
         </LinearLayout>
 
-        <!--<LinearLayout-->
-        <!--android:id="@+id/tab2"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1">-->
-
-        <!--<ImageView-->
-        <!--android:id="@+id/icon_dis_bicycle"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--android:layout_marginBottom="4dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:src="@drawable/ic_bicycle" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/text_dis_bicycle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:text="abc km"-->
-        <!--android:textColor="#FFFFFF"-->
-        <!--android:visibility="invisible"/>-->
-
-        <!--</LinearLayout>-->
-
         <LinearLayout
             android:id="@+id/tab3"
             android:layout_width="wrap_content"
@@ -99,35 +73,6 @@
                 android:onClick="onVehiceDistance" />
 
         </LinearLayout>
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/tab4"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="vertical"-->
-            <!--android:onClick="onVehiceDistance">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/icon_dis_bus"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="48dp"-->
-                <!--android:layout_marginBottom="4dp"-->
-                <!--android:layout_marginTop="4dp"-->
-                <!--android:src="@drawable/ic_bus"-->
-                <!--android:onClick="onVehiceDistance" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/text_dis_bus"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_above="@+id/icon_dis_bus"-->
-                <!--android:gravity="center"-->
-                <!--android:text="abc km"-->
-                <!--android:textColor="#FFFFFF"-->
-                <!--android:visibility="invisible"-->
-                <!--android:onClick="onVehiceDistance" />-->
-        <!--</LinearLayout>-->
 
     </LinearLayout>
 

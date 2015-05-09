@@ -3,14 +3,14 @@ package com.example.materialdesign_actionbar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.materialdesign_actionbar.adapter.CategoryRecyclerAdapter;
 import com.example.materialdesign_actionbar.model.Place;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,6 +27,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,16 +37,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
-import android.net.http.AndroidHttpClient;
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     private Toolbar toolbar;
-    private CategoryRecyclerAdapter catgrAdapter;
-    private RecyclerView recyclerView;
     private GoogleMap map;
     private Location currentLocation;
     private GoogleApiClient googleApiClient;
@@ -51,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private ArrayList<Place> places;
     private Polyline polyline;
     private List<LatLng> list;
-    private long distance;
+    private double distance;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
-        places=new ArrayList<>();
+        places = new ArrayList<>();
 
         init();
     }
@@ -101,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             Intent intent = new Intent(this, EditActivity.class);
             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             intent.putExtra("LatLng", latLng);
-            intent.putParcelableArrayListExtra("Places",places);
+            intent.putParcelableArrayListExtra("Places", places);
             startActivityForResult(intent, 1);
         }
 
@@ -159,7 +156,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private void handleLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions marker = new MarkerOptions().position(latLng).title("You're here");
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         map.addMarker(marker);
     }
 
@@ -174,37 +171,39 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1){
-            if(data!=null){
+        if (requestCode == 1) {
+            if (data != null) {
                 try {
                     places = data.getParcelableArrayListExtra("Places");
                     if (places.size() > 0) {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(places.get(0).getLat(), places.get(0).getLng()));
                         for (Place p : places) {
-                            switch (p.geticonID()) {
-                                case R.drawable.ic_restaurant:
+                            Log.e("Place ID", "" + p.getTypeID());
+                            switch (p.getTypeID()) {
+                                case 0:
                                     addMarker(p.getName(), R.drawable.marker_restaurant, new LatLng(p.getLat(), p.getLng()));
                                     break;
-                                case R.drawable.ic_park:
+                                case 1:
                                     addMarker(p.getName(), R.drawable.marker_park, new LatLng(p.getLat(), p.getLng()));
                                     break;
-                                case R.drawable.ic_gasstation:
+                                case 2:
                                     addMarker(p.getName(), R.drawable.marker_gas, new LatLng(p.getLat(), p.getLng()));
                                     break;
                             }
                         }
                         for (int i = 0; i < places.size() - 1; i++) {
                             getRoute(new LatLng(places.get(i).getLat(), places.get(i).getLng()), new LatLng(places.get(i + 1).getLat(), places.get(i + 1).getLng()));
+                            Log.e("Start point", "" + places.get(i).getLat() + " " + places.get(i).getLng());
                         }
                     }
-                    }catch(Exception ex){
+                } catch (Exception ex) {
 
-                    }
                 }
             }
         }
+    }
 
-    private void addMarker(String title,int path,LatLng ll ){
+    private void addMarker(String title, int path, LatLng ll) {
         MarkerOptions MO = new MarkerOptions()
                 .title(title)
                 .position(ll)
@@ -212,20 +211,21 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         map.addMarker(MO);
     }
-    public void drawRoute(){
+
+    public void drawRoute() {
         PolylineOptions po;
-        if(polyline==null){
-            po= new PolylineOptions().color(Color.RED).width(3).geodesic(true);
-            for(int i=0,tam=list.size();i<tam;i++){
+        if (polyline == null) {
+            po = new PolylineOptions().color(Color.RED).width(3).geodesic(true);
+            for (int i = 0, tam = list.size(); i < tam; i++) {
                 po.add(list.get(i));
             }
-            polyline=map.addPolyline(po);
-        }
-        else polyline.setPoints(list);
+            polyline = map.addPolyline(po);
+        } else polyline.setPoints(list);
     }
+
     public List<LatLng> buildJSONRoute(String json) throws JSONException {
 
-        JSONObject result= new JSONObject(json);
+        JSONObject result = new JSONObject(json);
         JSONArray routes = result.getJSONArray("routes");
 
         distance = routes.getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONObject("distance").getInt("value");
@@ -233,17 +233,17 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         List<LatLng> lines = new ArrayList<LatLng>();
 
-        for(int i=0;i<steps.length();i++)
-        {
-            String polyline= steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+        for (int i = 0; i < steps.length(); i++) {
+            String polyline = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
 
-            for(LatLng p: decodePolyline(polyline)){
+            for (LatLng p : decodePolyline(polyline)) {
                 lines.add(p);
             }
         }
         return lines;
     }
-    private List<LatLng> decodePolyline (String encoded) {
+
+    private List<LatLng> decodePolyline(String encoded) {
         List<LatLng> listPoints = new ArrayList<LatLng>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
@@ -271,48 +271,41 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         }
         return listPoints;
     }
-    public void getRoute(final LatLng origin, final LatLng destination) throws IOException
-    {
-        new Thread()
-        {
-            public void run(){
+
+    public void getRoute(final LatLng origin, final LatLng destination) throws IOException {
+        new Thread() {
+            public void run() {
                 String url = "http://maps.googleapis.com/maps/api/directions/json?origin="
-                        +origin.latitude+","+origin.longitude
-                        +"&destination="+destination.latitude+","+destination.longitude
+                        + origin.latitude + "," + origin.longitude
+                        + "&destination=" + destination.latitude + "," + destination.longitude
                         + "&sensor=false";
 
                 HttpResponse response;
                 HttpGet request;
-                AndroidHttpClient client= AndroidHttpClient.newInstance("route");
-                request =new HttpGet(url);
+                AndroidHttpClient client = AndroidHttpClient.newInstance("route");
+                request = new HttpGet(url);
 
-                try
-                {
+                try {
                     response = client.execute(request);
                     final String answer = EntityUtils.toString(response.getEntity());
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            try{
+                            try {
 
                                 list = buildJSONRoute(answer);
                                 drawRoute();
-                            }
-                            catch(JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
 
                             }
                         }
                     });
-                }
-                catch(IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
 
                 }
             }
-
-
         }.start();
     }
 }

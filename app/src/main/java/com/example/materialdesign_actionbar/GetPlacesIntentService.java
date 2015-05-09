@@ -40,10 +40,8 @@ public class GetPlacesIntentService extends IntentService {
                 JSONArray jsonArr = jsonObj.getJSONArray("results");
                 for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject obj = jsonArr.getJSONObject(i);
-                    JSONObject geometry = new JSONObject(
-                            obj.getString("geometry"));
-                    JSONObject location = new JSONObject(
-                            geometry.getString("location"));
+                    JSONObject geometry = new JSONObject(obj.getString("geometry"));
+                    JSONObject location = new JSONObject(geometry.getString("location"));
                     double lat = location.getDouble("lat");
                     double lng = location.getDouble("lng");
                     String name = obj.getString("name");
@@ -51,10 +49,13 @@ public class GetPlacesIntentService extends IntentService {
                     Place place = new Place(name, "", lat, lng, 0, 0, 0);
                     if (type == "restaurant") {
                         place.seticonID(R.drawable.ic_restaurant);
+                        place.setTypeID(0);
                     } else if (type == "park") {
                         place.seticonID(R.drawable.ic_park);
+                        place.setTypeID(1);
                     } else {
                         place.seticonID(R.drawable.ic_gasstation);
+                        place.setTypeID(2);
                     }
 
                     place.setPlaceId(placeId);
