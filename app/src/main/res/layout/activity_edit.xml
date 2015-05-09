@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/app_bar"
-        android:background="@color/primaryColor"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -22,6 +21,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:background="@color/primaryColorDark"
             android:onClick="onVehiceDistance">
 
             <ImageView
@@ -39,9 +39,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="abc km"
+                android:text=""
                 android:textColor="#FFFFFF"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:onClick="onVehiceDistance" />
         </LinearLayout>
 
@@ -51,6 +51,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:background="@color/primaryColor"
             android:onClick="onVehiceDistance">
 
             <ImageView
@@ -67,9 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="abc km"
+                android:text=""
                 android:textColor="#FFFFFF"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:onClick="onVehiceDistance" />
 
         </LinearLayout>

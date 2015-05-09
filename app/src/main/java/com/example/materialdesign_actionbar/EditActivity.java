@@ -62,6 +62,8 @@ public class EditActivity extends ActionBarActivity {
 
         text_dis_car = (TextView) findViewById(R.id.text_dis_car);
         text_dis_walk = (TextView) findViewById(R.id.text_dis_walk);
+//        text_dis_car.setText("0 km");
+        text_dis_walk.setText("0 km");
     }
 
     private View.OnClickListener onClickBack = new View.OnClickListener() {
@@ -78,6 +80,7 @@ public class EditActivity extends ActionBarActivity {
     public void onVehiceDistance(View v) {
         if (places.size() > 0) {
             LinearLayout linearLayout = (LinearLayout) v.getParent();
+            LinearLayout subLayout;
             Log.e("Id", "" + linearLayout.getId());
             switch (linearLayout.getId()) {
                 case R.id.tab1:
@@ -85,7 +88,10 @@ public class EditActivity extends ActionBarActivity {
                     for (Place place : places) {
                         distanceInWalkingMode += place.getDistanceInWalkingMode();
                     }
-                    text_dis_walk.setText("Total distance: " + distanceInWalkingMode + " km");
+                    text_dis_walk.setText(distanceInWalkingMode + " km");
+                    subLayout=(LinearLayout) findViewById(R.id.tab3);
+                    subLayout.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                    linearLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
                     text_dis_car.setText("");
                     break;
                 case R.id.tab3:
@@ -93,7 +99,10 @@ public class EditActivity extends ActionBarActivity {
                     for (Place place : places) {
                         distanceInDrivingMode += place.getDistanceInDrivingMode();
                     }
-                    text_dis_walk.setText("Total distance: " + distanceInDrivingMode + " km");
+                    text_dis_car.setText(distanceInDrivingMode + " km");
+                    subLayout=(LinearLayout) findViewById(R.id.tab1);
+                    subLayout.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                    linearLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
                     text_dis_walk.setText("");
                     break;
             }
