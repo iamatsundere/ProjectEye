@@ -3,7 +3,6 @@ package com.example.materialdesign_actionbar.model;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.example.materialdesign_actionbar.JSONReader;
 import com.example.materialdesign_actionbar.OnGetDistanceListener;
@@ -49,7 +48,8 @@ public class Place implements Parcelable {
         this.distanceInDrivingMode = source.readDouble();
         this.distanceInWalkingMode = source.readDouble();
         this.iconID = source.readInt();
-        this.placeId=source.readString();
+        this.placeId = source.readString();
+        this.typeID = source.readInt();
     }
 
     public void setListener(OnGetDistanceListener listener) {
@@ -143,6 +143,7 @@ public class Place implements Parcelable {
         dest.writeDouble(this.distanceInWalkingMode);
         dest.writeInt(this.iconID);
         dest.writeString(this.placeId);
+        dest.writeInt(this.typeID);
     }
 
     public void getFormattedAddress() {

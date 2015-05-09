@@ -27,7 +27,7 @@ public class JSONReader {
         googlePlacesUrl.append("location=" + latLng.latitude + ","
                 + latLng.longitude);
         googlePlacesUrl.append("&radius=" + Constants.PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&sensor=false");
         googlePlacesUrl.append("&types=" + type);
         googlePlacesUrl.append("&key=" + Constants.GOOGLE_API_KEY);
 

@@ -21,7 +21,6 @@ import com.example.materialdesign_actionbar.model.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EditActivity extends ActionBarActivity {
 
@@ -51,15 +50,15 @@ public class EditActivity extends ActionBarActivity {
         btnBack.setOnClickListener(onClickBack);
 
         places = new ArrayList<>();
-        myList = new ArrayList<Place>();
+        myList = new ArrayList<>();
         Intent intent = getIntent();
         latLng = intent.getParcelableExtra("LatLng");
-        myList=intent.getParcelableArrayListExtra("Places");
+        myList = intent.getParcelableArrayListExtra("Places");
 
-        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
-        rc.setLayoutManager(new LinearLayoutManager(this));
-        placeAdapter = new PlaceRecyclerAdapter(places, this);
-        rc.setAdapter(placeAdapter);
+//        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+//        rc.setLayoutManager(new LinearLayoutManager(this));
+//        placeAdapter = new PlaceRecyclerAdapter(places, this);
+//        rc.setAdapter(placeAdapter);
 
         text_dis_car = (TextView) findViewById(R.id.text_dis_car);
         text_dis_walk = (TextView) findViewById(R.id.text_dis_walk);
@@ -69,17 +68,17 @@ public class EditActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putParcelableArrayListExtra("Places",myList);
-                setResult(1,intent);
-                finish();
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra("Places", places);
+            setResult(1, intent);
+            finish();
         }
     };
 
     public void onVehiceDistance(View v) {
-        if(places.size()>0) {
+        if (places.size() > 0) {
             LinearLayout linearLayout = (LinearLayout) v.getParent();
-            Log.e("Id",""+linearLayout.getId());
+            Log.e("Id", "" + linearLayout.getId());
             switch (linearLayout.getId()) {
                 case R.id.tab1:
                     double distanceInWalkingMode = 0;
@@ -103,11 +102,11 @@ public class EditActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
         rc.setLayoutManager(new LinearLayoutManager(this));
         PlaceRecyclerAdapter placeAdapter = new PlaceRecyclerAdapter(myList, this);
         rc.setAdapter(placeAdapter);
-        super.onResume();
     }
 
     @Override
@@ -144,8 +143,9 @@ public class EditActivity extends ActionBarActivity {
         if (requestCode == 1) {
             if (data != null) {
                 Place place = data.getParcelableExtra("Place");
+                Log.e("Place", "" + place.getTypeID());
                 places.add(place);
-                placeAdapter.notifyDataSetChanged();
+//                placeAdapter.notifyDataSetChanged();
             }
         }
     }
