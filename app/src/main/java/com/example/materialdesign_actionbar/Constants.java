@@ -5,6 +5,7 @@ package com.example.materialdesign_actionbar;
  */
 public final class Constants {
     public final static String TAG = "Eye";
-    public final static String GOOGLE_API_KEY = "AIzaSyBsAVue2_s3ZnWrYE00viVk9aL3_KJaX3g";
+    public final static String GOOGLE_API_KEY = "AIzaSyCXuTLHAv6Qe-835K8st_B2WatXXaS4YYo";
+//    AIzaSyAFiNpb1SQybxskyM2_RN5ZJ96RmGdflTc
     public final static int PROXIMITY_RADIUS = 10000;
 }

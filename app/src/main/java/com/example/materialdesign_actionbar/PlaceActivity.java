@@ -59,16 +59,16 @@ public class PlaceActivity extends ActionBarActivity implements OnGetDistanceLis
         }
     }
 
-    @Override
-    protected void onResume() {
-        getData();
-
-        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
-        rc.setLayoutManager(new LinearLayoutManager(this));
-        placeAdapter = new PlaceRecyclerAdapter(places, this);
-        rc.setAdapter(placeAdapter);
-        super.onResume();
-    }
+//    @Override
+//    protected void onResume() {
+//        getData();
+//
+//        RecyclerView rc = (RecyclerView) findViewById(R.id.recycler_view);
+//        rc.setLayoutManager(new LinearLayoutManager(this));
+//        placeAdapter = new PlaceRecyclerAdapter(places, this);
+//        rc.setAdapter(placeAdapter);
+//        super.onResume();
+//    }
 
     public void OnRowClick(View v) {
 
